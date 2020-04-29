@@ -1,0 +1,120 @@
+
+Aula Passada: 
+- LES: lista estática sequencial
+- Pilha estática
+- Fila estática
+
+Hoje: estruturas de dados dinâmicas
+1) LDE
+2) Pilha Dinâmica
+3) Fila Dinâmica
+4) LDDE
+
+--
+
+2) Pilha Dinâmica
+
+
+a) Implementacao 
+
+// Um Item é um elemento de uma pilha.
+typedef struct tItem {
+    int chave;
+    struct tItem *ant;  // aponta para o anterior da pilha
+} Item;
+
+// Recebe um valor para a chave e devolve um apontador para uma estrutura Item.
+// "Aloca memória, ajusta valores dos campos, e devolve o ponteiro."
+Item *criaItem (int x) {
+    Item *novo = malloc (sizeof (Item));
+    novo->chave = x;
+    novo->ant = NULL;
+    return novo;
+}
+
+
+// Uma estrutura de Pilha
+typedef struct tPilha {
+    int q;       // qtde de elementos na pilha
+    Item *topo;  // aponta para o topo da pilha
+}Pilha;
+
+// Devolve um apontador para uma estrutura Pilha.
+// "Aloca memória, ajusta valores dos campos, e devolve o ponteiro."
+Pilha *criaPilha () {
+    Pilha *p = malloc (sizeof (Pilha));
+    p->q = 0;
+    p->topo = NULL;
+    return p;
+}
+
+--
+
+b) Operações: consumo de tempo
+
+   i)  Inserção: O(1)
+   ii) Remoção:  O(1)
+
+--
+
+i) Inserção: em todos os casos, deve-se incrementar a quantidade de itens 
+
+- caso 1: pilha vazia
+  topo = novo
+
+- caso 2: pilha nao vazia
+  novo->ant = topo
+  topo = novo
+
+(Na verdade, o único caso que precisa ser tratado é o caso 2, pois o topo é inicialmente NULL.)
+
+--
+
+ii) Remoção
+
+    x = topo->chave
+    tmp = topo
+    topo = topo->ant
+    free (tmp)
+    q--
+    devolva x
+
+--
+
+Dicas para exercicios do BOCA:
+
+
+int pilhaVazia (Pilha *p) {
+    return p->topo == NULL;
+}
+
+void imprimir (Pilha *p) {
+    Item *it;
+    int i;
+    for (i = 0, it = p->topo; i < p->q - 1; i++, it = it->ant) {
+        printf ("%d ", it->chave);
+    }
+    if (p->q > 0) {
+        printf ("%d\n", it->chave);
+    }
+}
+
+
+void inserir (Pilha *p, int x) {
+    // aloca novo item
+    Item *novo = criaItem (x);
+    novo->ant = p->topo;
+    p->topo = novo;
+    p->q++;
+}
+
+int remover (Pilha *p) {
+    Item *it = p->topo, *it2 = it;
+    int x = it->chave;
+    p->topo = p->topo->ant;
+    p->q--;
+    free (it2);
+    return x;
+}
+
+

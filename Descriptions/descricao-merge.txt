@@ -1,0 +1,158 @@
+Algoritmos de Ordenacao: Merge Sort.
+
+Aula Passada: (consumo de tempo)
+- Insertion Sort: O(n^2)
+- Selection Sort: O(n^2)
+
+Algoritmos "estáveis": (desempate pela ordem de "entrada de dados")
+- Insertion Sort: estável
+- Selection Sort: não-estável
+
+Hoje: algoritmos de ordenacao O(n log n).
+- Intercalação (Merge Sort)
+
+--
+
+Slide 3: Problema da intercalacao
+
+Slides 4 a 24: Simulacao do algoritmo de intercalacao
+
+--
+
+Slide 25: codigo de intercala()
+- note que criamos um vetor temporario (linha 3) para auxiliar na intercalacao;
+- linha 4: intercalacao com o menor entre os dois subvetores;
+- linha 11: preenchimento com o restante que sobrou do subvetor 1;
+- linha 13: preenchimento com o restante que sobrou do subvetor 2;
+- linha 15: transfere o conteudo do vetor temporario para o vetor original.
+
+Slides 26 a 29: analise de consumo de tempo 
+- intercala é O(n);
+- no pior caso, cada trecho (linhas 4, 11, 13 e 15) consomem O(n) unidades de tempo.
+
+--
+
+Slide 30: merge sort é uma técnica de "divisão e conquista".
+
+
+(Simulacao)
+
+Slides 31 a 34:
+- 1o passo (recursivo): dividir o problema "original" em problemas "menores".
+
+Slide 35: "conquista" problemas pequenos (com 1 unico elemento)
+- um subvetor com um único elemento já está ordenado.
+
+Slide 36: executa o "intercala"
+- combina solucao de problemas pequenos para obter uma solucao para um problema maior.
+
+Slide 37: conquistou problema com 2 elementos
+
+Slides 38 a 39: "divisao" em problemas menores
+
+Slide 40: "conquista" de problemas pequenos (1 unico elemento)
+
+Slides 41 a 44: "conquista" (intercala: combina solucoes de problemas menores)
+
+Slides 45 a 47: "divisao"
+
+Slides 48 a 50: "conquista" (intercala)
+
+Slides 51 a 52: "divisao"
+
+Slides 53 a 66: "conquista" (intercala)
+
+Slide 67: vista panorâmica de outro exemplo com os passos de "divisao" e "conquista".
+
+--
+
+Slide 68
+- Um exemplo de codigo para ser usado no algoritmo Merge Sort é dado abaixo;
+- Ele foi usado no exercicio do BOCA: note que usamos a condicao "if (v[i] <= v[j])" para seguir o gabarito que estava no BOCA.
+
+// Recebe um vetor de inteiros e 3 indices para definir inicio e fim de cada subvetor.
+void intercala (int *v, int esq, int meio, int dir) {
+    int n = dir - esq + 1;
+    int *vaux = malloc (n * sizeof (int));
+    int i = esq, j = meio+1, k = 0;
+    while (i <= meio && j <= dir) {
+        if (v[i] <= v[j]) {  // usamos <= para a implementacao no BOCA
+            vaux[k++] = v[i++];
+        }
+        else {
+            vaux[k++] = v[j++];
+        }
+    }
+    while (i <= meio) {
+        vaux[k++] = v[i++];
+    }
+    while (j <= dir) {
+        vaux[k++] = v[j++];
+    }
+    for (i = esq; i <= dir; i++) {
+        v[i] = vaux[i-esq];  // note que os indices originais devem ser mantidos
+    }
+    free (vaux);
+}
+
+--
+
+Slide 69: algoritmo Merge Sort
+- divisao e conquista: algoritmo recursivo;
+- linha 2, base da recursao: subvetores com 1 unico elemento sao os 1os a serem conquistados;
+- linha 4: chamada recursiva para 1a metade do vetor;
+- linha 5: idem para 2a metade;
+- linha 6: combina solucoes anteriores de problemas menores (conquista).
+
+Slide 70: consumo de tempo O(n log n)
+- linhas 4 e 5: cada chamada recursiva consome "metade" ou T(n/2);
+- linha 6: o intercala é O(n), como visto anteriormente.
+
+Slides 71 a 78: 
+- o consumo de tempo do algoritmo MergeSort está na mesma classe de complexidade de tempo que a recorrencia.
+- recorrencia: T(n) = 2*T(n/2) + n = o(n log n).
+
+
+--
+
+Dicas para o exercicio 41 do BOCA:
+
+
+- algoritmo merge sort:
+
+void mergeSort (int *v, int e, int d, int n) {
+    int meio;
+    if (e < d) {
+        meio = (d+e)/2;
+        mergeSort (v, e, meio, n);
+        mergeSort (v, meio+1, d, n);
+        imprime (v, n);
+        intercala (v, e, meio, d);
+    }
+}
+
+
+- funcao main:
+
+int main () {
+    int n, v[10000], i;
+    scanf ("%d", &n);
+    for (i = 0; i < n; i++) {
+        scanf ("%d", &v[i]);
+    }
+    
+    imprime(v, n);
+    mergeSort (v, 0, n-1, n);
+    imprime (v, n);
+    
+    return 0;
+}
+
+--
+
+
+
+
+
+
+

@@ -1,0 +1,266 @@
+Algoritmos de Ordenacao: Quick Sort.
+
+Aula Passada: (consumo de tempo)
+- Insertion Sort: O(n^2)
+- Selection Sort: O(n^2)
+
+Algoritmos "estáveis": (desempate pela ordem de "entrada de dados")
+- Insertion Sort: estável
+- Selection Sort: não-estável
+
+Hoje: algoritmos de ordenacao O(n log n).
+- Particionamento (Quick Sort)
+
+--
+
+Slides 3 a 4: Problema do particionamento ("pivô")
+
+Slides 5 a 19: Simulacao do algoritmo de particionamento
+
+Slide 20: ideia principal do algoritmo quick sort
+- pivô na posição correta de ordenação
+
+--
+
+Slide 21: curiosidades sobre o quick sort
+
+Slides 22 a 56: simulacao do algoritmo quick sort
+
+Slide 22: inicialmente temos...
+- subvetor v[e..d]
+- e: indice à esquerda
+- d: indice à direita
+- pivo: aponta para o ultimo elemento do vetor v[d]
+- atual aponta para posicao inicial "e"
+- "um": ultimo menor aponta para e-1
+- enquanto o indice atual < d:
+  a cada passo, comparamos se v[atual] < pivo, senao incremente atual.
+
+Slides 23 a 26
+- se v[atual] < pivo 
+  entao incremente "um"
+        troque v[um] <-> v[atual]
+        incremente atual
+
+Slides 26 a 29
+- se v[atual] < pivo ...
+  senao incremente atual
+
+Slides 29 a 31
+- enquanto "atual < d": falso (saída do loop)
+- coloca pivo na posicao correta de ordenacao:
+  troque v[d] <-> v[um+1]
+- devolva um+1 (posicao do pivo)
+
+Slide 32
+- chamada recursiva para as duas particoes definidas pelo pivo do passo anterior.
+
+Slides 32 a 33
+- caso com 1 unico elemento só tem o pivo (já ordenado).
+
+Slide 34: inicialmente temos...
+- subvetor v[e..d]
+- e: indice à esquerda
+- d: indice à direita
+- pivo: aponta para o ultimo elemento do vetor v[d]
+- atual aponta para posicao inicial "e"
+- "um": ultimo menor aponta para e-1
+- enquanto o indice atual < d:
+  a cada passo, comparamos se v[atual] < pivo, senao incremente atual.
+
+Slides 34 a 36
+- se v[atual] < pivo 
+  entao incremente "um"
+        troque v[um] <-> v[atual]   // neste caso estao na mesma posicao e nao ha alteracao na pratica
+        incremente atual
+
+Slides 36 a 38
+- se v[atual] < pivo 
+  entao incremente "um"
+        troque v[um] <-> v[atual]   // neste caso estao na mesma posicao e nao ha alteracao na pratica
+        incremente atual
+
+Slides 38 a 40
+- se v[atual] < pivo 
+  entao incremente "um"
+        troque v[um] <-> v[atual]   // neste caso estao na mesma posicao e nao ha alteracao na pratica
+        incremente atual
+
+Slides 40 a 42
+- enquanto "atual < d": falso (saída do loop)
+- coloca pivo na posicao correta de ordenacao:
+  troque v[d] <-> v[um+1]
+- devolva um+1 (posicao do pivo)
+
+Slide 42: inicialmente temos...
+- subvetor v[e..d]
+- e: indice à esquerda
+- d: indice à direita
+- pivo: aponta para o ultimo elemento do vetor v[d]
+- atual aponta para posicao inicial "e"
+- "um": ultimo menor aponta para e-1
+- enquanto o indice atual < d:
+  a cada passo, comparamos se v[atual] < pivo, senao incremente atual.
+
+Slides 42 a 44
+- se v[atual] < pivo 
+  entao incremente "um"
+        troque v[um] <-> v[atual]   // neste caso estao na mesma posicao e nao ha alteracao na pratica
+        incremente atual
+
+Slides 44 a 46
+- se v[atual] < pivo 
+  entao incremente "um"
+        troque v[um] <-> v[atual]   // neste caso estao na mesma posicao e nao ha alteracao na pratica
+        incremente atual
+
+Slides 46 a 48
+- enquanto "atual < d": falso (saída do loop)
+- coloca pivo na posicao correta de ordenacao:
+  troque v[d] <-> v[um+1]
+- devolva um+1 (posicao do pivo)
+
+Slide 48: inicialmente temos...
+- subvetor v[e..d]
+- e: indice à esquerda
+- d: indice à direita
+- pivo: aponta para o ultimo elemento do vetor v[d]
+- atual aponta para posicao inicial "e"
+- "um": ultimo menor aponta para e-1
+- enquanto o indice atual < d:
+  a cada passo, comparamos se v[atual] < pivo, senao incremente atual.
+
+Slides 48 a 49
+- se v[atual] < pivo ...
+  senao incremente atual
+
+Slides 49 a 51
+- enquanto "atual < d": falso (saída do loop)
+- coloca pivo na posicao correta de ordenacao:
+  troque v[d] <-> v[um+1]
+- devolva um+1 (posicao do pivo)
+
+Slide 51
+inicialmente temos...
+- subvetor v[e..d]
+- e: indice à esquerda
+- d: indice à direita
+- pivo: aponta para o ultimo elemento do vetor v[d]
+- atual aponta para posicao inicial "e"
+- "um": ultimo menor aponta para e-1
+- enquanto o indice atual < d:
+  a cada passo, comparamos se v[atual] < pivo, senao incremente atual.
+
+Slides 51 a 52
+- enquanto "atual < d": falso (saída do loop)
+- coloca pivo na posicao correta de ordenacao:
+  troque v[d] <-> v[um+1]
+- devolva um+1 (posicao do pivo)
+
+Slides 52 a 56
+- volta da recursão: o vetor já está ordenado
+
+--
+
+Slide 57: codigo do quick sort
+- linha 3: base da recursão
+- linha 5: particionamento ("posicionamento do pivo")
+- linha 6: chamada recursiva para particao 1
+- linha 7: chamada recursiva para particao 2
+
+Slide 58: consumo de tempo O(?)
+- para analisar as linhas 6 e 7, devemos observar os casos de particionamento;
+- qdo ocorre um bom particionamento?
+- qdo um particionamento é desbalanceado ou ruim?
+
+Slides 59 a 60: pior caso do quick 
+- particionamento "desbalanceado": 1 para n-1
+
+Slide 61 a 65: no pior caso, o quick sort consome O(n^2) unidades de tempo.
+- No pior caso, o consumo de tempo do quick sort está na mesma classe de complexidade que a recorrencia:
+  T(1) = 1
+  T(n) = T(n-1) + n   para n > 1
+  
+Slides 66 a 69: o melhor caso de particionamento é na "metade"
+- note que se o particionamento ocorre exatamente na metade do vetor, teremos um comportamento similar ao merge sort (apesar disso, na pratica, conforme visto no slide 21, o quick sort é considerado mais eficiente que o merge sort, por que?)
+
+Slides 70 a 71: o quick sort consome O(n log n) unidades de tempo no melhor caso de particionamento.
+
+Slides 72 a 73: na media, pode-se mostrar que o quick sort também consome O(n log n) unidades de tempo.
+- Note que em analise de algoritmos, podemos analisar o pior, o melhor e o caso médio.
+
+--
+
+
+Dicas para o exercicio 43 do BOCA:
+
+
+- algoritmo particiona:
+
+int particiona (int *v, int e, int d, int p, int n) {
+    int i = e, pm = e-1;
+    // troca v[p] <-> v[d]
+    int tmp = v[p];
+    v[p] = v[d];
+    v[d] = tmp;
+    p = d;
+    while (i < d) {
+        if (v[i] <= v[p]) {
+            pm++;
+            // troca v[i] <-> v[pm]
+            tmp = v[i];
+            v[i] = v[pm];
+            v[pm] = tmp;
+        }
+        i++;
+        imprime (v, n);
+    }
+    pm++;
+    // troca v[p] <-> v[pm]
+    tmp = v[i];
+    v[i] = v[pm];
+    v[pm] = tmp;
+    imprime (v, n);
+    return pm;
+}
+
+
+- algoritmo quick sort:
+
+void quickSort (int *v, int e, int d, int n) {
+    if (e < d) {
+        int p = d;
+        int pm = particiona (v, e, d, p, n);
+        quickSort (v, e, pm-1, n);
+        quickSort (v, pm+1, d, n);
+    }
+}
+
+
+- funcao main:
+
+int main () {
+    int n, i;
+    scanf ("%d", &n);
+    int *v = malloc (n * sizeof (int));
+    for (i = 0; i < n; i++) {
+        scanf ("%d", &v[i]);
+    }
+    
+    int e = 0, d = n-1;
+    imprime (v, n);
+    quickSort (v, e, d, n);
+    imprime (v, n);
+    
+    free (v);
+    return 0;
+}
+
+--
+
+
+
+
+
+
+

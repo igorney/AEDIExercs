@@ -1,0 +1,103 @@
+Algoritmos de Ordenacao: Heap Sort.
+ - consumo de tempo: O (n * log n)
+ - usa estrutura "Heap"
+
+--
+
+Aula Passada: (consumo de tempo)
+
+- Merge Sort: O(n * log n)
+  - intercala
+
+- Quick Sort: O(n * log n)
+  - particiona
+
+--
+
+Slide 2: caracteristicas do algoritmo
+- a cada passo, o Heap Sort seleciona o maximo (raiz do max-heap)
+- Heap Sort é estável
+
+Slides 3 a 17: revisao da estrutura Heap
+
+Slides 18 a 28: algoritmo Heap Sort
+- HeapSort (v, n)
+  - ConstroiHeap (v, n);
+  - para i = n-1 até 0, faça
+    - n = SelecionaMaximo (v, n)
+    - Peneirar (v, n, 0)
+
+- SelecionaMaximo (v, n)
+  // troca a raiz com o ultimo elemento no vetor
+  - troca v[0] <-> v[n-1]
+  // decrementa n
+  - n--
+  - devolve n
+
+Slides 29 a 35: consumo de tempo
+- Heap Sort é O(n * log n)
+  - ConstroiHeap é O(n * h)
+  - Altura do Heap: h = O(log n)
+    - Peneirar é O(h) = O(log n)
+
+
+
+--
+
+Dicas para os exercicios do BOCA:
+
+void imprime (int *v, int n) {
+    int i;
+    for (i = 0; i < n-1; i++) {
+        printf ("%d ", v[i]);
+    }
+    if (n > 0) {
+        printf ("%d\n", v[n-1]);
+    }
+}
+
+void troca (int *v, int i, int j) {
+    int tmp = v[i];
+    v[i] = v[j];
+    v[j] = tmp;
+}
+
+int selecionaMaximo (int *v, int n) {
+    troca (v, 0, n-1);
+    return n-1;
+}
+
+void heapSort (int *v, int n) {
+    int i;
+    constroiHeap (v, n);
+    for (i = n-1; i >= 0; i--) {
+        imprime (v, n);
+        n = selecionaMaximo (v, n);
+        peneirar (v, n, 0);
+    }
+}
+
+int main () {
+    int n, i;
+    scanf ("%d", &n);
+    int *v = malloc (n * sizeof (int));
+    for (i = 0; i < n; i++) {
+        scanf ("%d", &v[i]);
+    }
+    imprime (v, n);
+    heapSort (v, n);
+    imprime (v, n);
+    
+    free (v);
+    return 0;
+}
+
+
+--
+
+
+
+
+
+
+

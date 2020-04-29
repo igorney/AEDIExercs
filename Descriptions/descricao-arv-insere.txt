@@ -1,0 +1,282 @@
+Árvores
+
+--
+
+Aula Passada:
+- Heap (estrutura de dados)
+- Heap Sort (algoritmos de ordenacao)
+  - consumo de tempo: O(n * log n)
+
+--
+
+Slides
+-2: exemplos de árvores em Ciência da Computação
+-3: definição de árvore enraizada
+    - em uma árvore enraizada, temos um nó especial chamado de raiz
+-4: motivação para usar árvores
+-5: podemos efetuar as operações de inserção, remoção e busca em tempo O(log n)
+-6: exemplos de diferentes representações de árvores
+    - parênteses, diagrama
+-7: representação mais comum em Ciência da Computação
+    - "nós" e "arestas"
+-8: definições de filhos, pais, tios,irmãos, avós
+-9: filhos
+-10: pai
+-11: irmãos
+-12: tio
+-13: avô
+-14: grau de saída = quantidade de filhos
+-15: ancestrais, outro exemplo:
+     - podemos dizer também que v é ancestral de z
+     descendentes, outro exemplo:
+     - podemos dizer também que z é descendente de v
+-16: nó interior tem grau de saida maior que zero (ou algum filho)
+-17: nó folha tem grau zero (ou nenhum filho)
+-18: o maior grau de saida de um nó define o grau de saída da árvore
+     - grau da árvore = grau máximo dentre todos os nós da árvore
+-19: nível (ou profundidade) e altura de um nó
+     - podemos dizer também que o nível ou profundidade de um nó z 
+       é a quantidade de arestas no caminho da raiz até z;
+       por exemplo, no caminho de v até z, existem 2 arestas, 
+       portanto, nível(z) = 2;
+-20: altura de um nó i é o nível máximo dentre os seus descendentes;
+     - por exemplo, nível(v) = nível máximo entre w1, .., wj e z = 2;
+-21: altura da árvore = nível máximo dentre todos os nós da árvore;
+-22: árvore com filhos ordenados, da esquerda para a direita;
+-23: árvore cheia ou completa
+     - por exemplo, em uma árvore binária completa, 
+       total de folhas = 2^h, onde h = altura da árvore;
+-24: implementação estática de árvores: vetor (ex. heap);
+     - dinâmica: "listas encadeadas"
+       - 3 ponteiros: pai, filho esquerdo, filho direito;
+-25: exemplos de estruturas de dados representando árvores
+     - árvore binária de busca
+     - árvores "balanceadas" para garantir operações com consumo de tempo
+       O (log n): AVL, Rubro-Negra, etc;
+-26: definição de árvore binária
+     - em uma árvore não temos "ciclos";
+     - cada nó na árvore tem no máximo 2 filhos;
+-27: o exemplo não é árvore, pois tem um ciclo (A, B, E, C);
+-28: este exemplo não é árvore, pois tem um ciclo (B, D);
+-29: este exemplo é uma árvore binária: 
+     - não tem ciclos (portanto é árvore);
+     - cada nó tem no máximo 2 filhos;
+-30: não é árvore, pois tem o ciclo (B, D, G);
+-31: em uma árvore estritamente binária, 
+     cada nó interno tem exatamente 2 filhos;
+-32: em uma árvore binária completa, 
+     cada nível i tem exatamente 2^i nós;
+     Por exemplo, no nível zero, temos apenas a raiz;
+     no nível 1, temos 2 nós, e assim por diante;
+-33: Em uma árvore binária completa de altura h, temos:
+     - n = 2^0 + 2^1 + 2^2 + ... + 2^h = 2^(h+1) - 1 nós;
+     - 2^h folhas
+     - n - 2^h = 2*2^h - 1 - 2^h = 2^h - 1 nós internos;
+-34: A altura de uma árvore binária é h = chao (log n),
+     onde n é o total de nós na árvore;
+-35: Propriedade estrutural de uma árvore binária de busca:
+     - para cada nó i, temos que os valores das chaves respeitam o seguinte:
+       "subárvore esquerda" < chave de i < "subárvore direita"
+     - à esquerda de i, temos as chaves que são menores que a chave de i;
+     - à direita, temos as chaves maiores...
+-36 a 38: esta propriedade estrutural deve valer para todos os nós
+          de uma árvore binária de busca;
+-39: Árvore Binária de Busca (ABB): implementação
+     - estática: vetor;
+     - dinâmica: lista encadeada (3 ponteiros: pai, filhoE, filhoD);
+-40: implementação (struct)
+     - tArvore: ponteiro para raiz, e inteiro quantidade;
+                arv->raiz e arv->quantidade;
+     - tNo: ponteiros esq, dir, pai, e inteiro chave;
+            novo->esq, novo->dir, novo->pai, novo->chave;
+-41: operações: inserção, remoção e visita dos nós;
+
+Slides 42 a 69: inserção
+-42: inicialmente, a árvore está vazia (criaArvore ()):
+     - arv->raiz = NULL;
+     - arv->quantidade = 0;
+criaArvore ()
+  - declara ponteiro e aloca memoria para a estrutura tArvore;
+  - ajusta valores iniciais para os campos raiz e quantidade (NULL e zero);
+  - devolve ponteiro;
+
+-43: inserir "5"
+     - novo = criaNo (5)
+criaNo (x)
+  - declara ponteiro e aloca memoria para a estrutura tNo;
+  - ajusta valores iniciais para os campos pai, esq, dir, chave
+    (pai = esq = dir = NULL, chave = x);
+  - devolve ponteiro;
+
+-44: (Caso Particular: inserção em árvore vazia)
+     - raiz = novo
+     - quantidade++;
+
+-45: inserir x = 3, novo = criaNo (3);
+-46: busca posição de inserção na ABB;
+     - pai = "anterior" (inicialmente NULL);
+     - filho = "atual" (inicialmente a raiz da árvore);
+-47: se x < filho->chave,   // vai para a esquerda na arvore
+     então pai = filho, 
+           filho = filho->esq;
+-48: encontrou posição de inserção (atual == NULL, mas anterior != NULL);
+     -pai->esq = novo;
+     -novo->pai = pai;
+     -quantidade++;
+-49: inserir x = 7, novo = criaNo (7);
+     busca posição de inserção na ABB;
+     - pai inicialmente NULL;
+     - filho inicialmente a raiz da árvore;
+-50: se x > filho->chave,   // vai para a direita na arvore
+     então pai = filho, 
+           filho = filho->dir;
+-51: encontrou posição de inserção (filho == NULL, mas pai != NULL);
+     -pai->dir = novo;
+     -novo->pai = pai;
+     -quantidade++;
+-52: inserir x = 6, novo = criaNo (6);
+     busca posição de inserção na ABB;
+     - pai inicialmente NULL;
+     - filho inicialmente a raiz da árvore;
+-53: se x > filho->chave, 
+     então pai = filho, 
+           filho = filho->dir;
+-54: se x < filho->chave, 
+     então pai = filho, 
+           filho = filho->esq;
+-55: encontrou posição de inserção (filho == NULL, mas pai != NULL);
+     -pai->esq = novo;
+     -novo->pai = pai;
+     -quantidade++;
+-56: inserir x = 2, novo = criaNo (2);
+     busca posição de inserção na ABB;
+     - pai inicialmente NULL;
+     - filho inicialmente a raiz da árvore;
+-57: se x < filho->chave, 
+     então pai = filho, 
+           filho = filho->esq;
+-58: se x < filho->chave, 
+     então pai = filho, 
+           filho = filho->esq;
+-59: encontrou posição de inserção (filho == NULL, mas pai != NULL);
+     -pai->esq = novo;
+     -novo->pai = pai;
+     -quantidade++;
+-60: inserir x = 4, novo = criaNo (4);
+     busca posição de inserção na ABB;
+     - pai inicialmente NULL;
+     - filho inicialmente a raiz da árvore;
+-61: se x < filho->chave, 
+     então pai = filho, 
+           filho = filho->esq;
+-62: se x > filho->chave, 
+     então pai = filho, 
+           filho = filho->dir;
+-63: encontrou posição de inserção (filho == NULL, mas pai != NULL);
+     -pai->dir = novo;
+     -novo->pai = pai;
+     -quantidade++;
+-64: inserir x = 1, novo = criaNo (1);
+     busca posição de inserção na ABB;
+     - pai inicialmente NULL;
+     - filho inicialmente a raiz da árvore;
+-65: se x < filho->chave, 
+     então pai = filho, 
+           filho = filho->esq;
+-66: se x < filho->chave, 
+     então pai = filho, 
+           filho = filho->esq;
+-67: se x < filho->chave, 
+     então pai = filho, 
+           filho = filho->esq;
+-68: encontrou posição de inserção (filho == NULL, mas pai != NULL);
+     -pai->esq = novo;
+     -novo->pai = pai;
+     -quantidade++;
+
+Slide 69: caso particular e caso geral para insercao
+Inserir (arv, x) {
+    novo = criaNo (x);
+    // caso particular: arvore vazia
+    se (arvoreVazia (arv)) {
+        arv->raiz = novo;
+        arv->quantidade++;
+    }
+    // caso geral: arvore nao vazia
+    senao {
+        // busca posicao de insercao na ABB
+        pai = NULL;
+        filho = arv->raiz;
+        enquanto (filho != NULL) {
+            pai = filho;
+            se (x > filho->chave) {
+                filho = filho->dir;
+            }
+            else { // modificar se nao quiser inserir chaves repetidas!
+                filho = filho->esq;
+            }
+        }
+        // Neste ponto, temos que filho == NULL e pai != NULL.
+        se (x > pai->chave) {
+            pai->dir = novo;
+        }
+        else {
+            pai->esq = novo;
+        }
+        novo->pai = pai;
+        arv->quantidade++;
+    }
+}  
+
+Slides 70 a 73: ordem de visita dos nós de uma ABB
+-pre-ordem: visita, recursao para esquerda, recursao para direita;
+-in-ordem: recursao esquerda, visita, recursao direita;
+-pos-ordem: recursao esquerda, recursao direita, visita;
+
+Slides 74 a 90: sugestões de implementação
+
+--
+
+Qualquer dúvida ou sugestão, por favor, envie um email para
+    alex.noma <arroba> gmail.com
+com o(s) número(s) do(s) slide(s) e a pergunta ou comentário.
+
+--
+
+Dicas para os exercicios do BOCA:
+
+typedef struct tNo {
+    int chave;
+    struct tNo *pai, *esq, *dir;
+} No;
+
+No *criaNo (int x) {
+    No *novo = malloc (sizeof (No));
+    novo->chave = x;
+    novo->pai = novo->esq = novo->dir = NULL;
+    return novo;
+}
+
+typedef struct tArvore {
+    No *raiz;
+    int q;
+} Arvore;
+
+Arvore *criaArvore () {
+    Arvore *t = malloc (sizeof (Arvore));
+    t->raiz = NULL;
+    t->q = 0;
+    return t;
+}
+
+
+
+
+--
+
+
+
+
+
+
+

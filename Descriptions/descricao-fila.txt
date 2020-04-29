@@ -1,0 +1,127 @@
+
+Aula Passada: 
+- LES: lista estática sequencial
+- Pilha estática
+- Fila estática
+
+Hoje: estruturas de dados dinâmicas
+1) LDE
+2) Pilha Dinâmica
+3) Fila Dinâmica
+4) LDDE
+
+--
+
+3) Fila Dinâmica
+
+
+a) Implementacao 
+
+// Um Item é um elemento de uma fila.
+typedef struct tItem {
+    int chave;
+    struct tItem *prox;  // aponta para o proximo da fila
+} Item;
+
+// Recebe um valor para a chave e devolve um apontador para uma estrutura Item.
+// "Aloca memória, ajusta valores dos campos, e devolve o ponteiro."
+Item *criaItem (int x) {
+    Item *novo = malloc (sizeof (Item));
+    novo->chave = x;
+    novo->ant = NULL;
+    return novo;
+}
+
+
+// Uma estrutura de Fila.
+typedef struct tFila {
+    int q;      // qtde de elementos na fila
+    Item *ini;  // aponta para o inicio da fila
+    Item *fim;  // aponta para o fim da fila
+}Fila;
+
+// Devolve um apontador para uma estrutura Fila.
+// "Aloca memória, ajusta valores dos campos, e devolve o ponteiro."
+Fila *criaFila () {
+    Fila *f = malloc (sizeof (Fila));
+    f->q = 0;
+    f->topo = NULL;
+    return f;
+}
+
+--
+
+b) Operações: consumo de tempo
+
+   i)  Inserção: O(1)
+   ii) Remoção:  O(1)
+
+--
+
+i) Inserção
+
+- caso 1: fila vazia
+  ini = novo
+  fim = novo
+
+- caso 2: senao insere no fim da fila
+  fim->prox = novo
+  fim = novo
+
+--
+
+ii) Remoção
+
+    x = ini->chave
+    tmp = ini
+    ini = ini->prox
+    se ini == NULL {
+        fim = NULL
+    }
+    free (tmp)
+    devolva x
+
+--
+
+Dicas para exercicios do BOCA:
+
+
+int filaVazia (Fila *f) {
+    return f->ini == NULL;
+}
+
+void imprimir (Fila *f) {
+    Item *it = f->ini;
+    int i;
+    for (; it != NULL && it->prox != NULL; i++, it = it->prox) {
+        printf ("%d ", it->chave);
+    }
+    if (it != NULL) {
+        printf ("%d\n", it->chave);
+    }
+}
+
+void inserir (Fila *f, int x) {
+    // aloca novo item
+    Item *novo = criaItem (x);
+    if (filaVazia (f)) {
+        f->ini = f->fim = novo;
+    }
+    else {
+        f->fim->prox = novo;
+        f->fim = novo;
+    }
+}
+
+int remover (Fila *f) {
+    Item *it = f->ini, *it2 = it;
+    int x = it->chave;
+    f->ini = f->ini->prox;
+    if (f->ini == NULL) {
+        f->fim = NULL;
+    }
+    free (it2);
+    return x;
+}
+
+

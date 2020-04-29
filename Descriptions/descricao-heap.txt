@@ -1,0 +1,235 @@
+Algoritmos de Ordenacao: Heap Sort.
+
+--
+
+Aula Passada: (consumo de tempo)
+
+- Merge Sort: O(n * log n)
+  - intercala
+
+- Quick Sort: O(n * log n)
+  - particiona
+
+--
+
+Slides 2 a 3: Definicao de Heap
+(propriedade estrutural)
+- Um vetor v é um heap se, para cada nó i, vale:
+  - v[i] >= chave de seus filhos
+
+Slides 4 a 12:
+- v[0] é a raiz e é o maior elemento do heap (valor máximo)
+- filhoEsquerdo(i) = 2*i + 1
+- filhoDireito(i)  = 2*i + 2
+- pai(i) = chao((i-1)/2)
+- ultimoPai(n) = chao(n/2) - 1
+- folhas: chao(n/2) <= i < n
+
+Slide 13:
+- Peneirar (v, n, i)
+  - selecione o "maiorFilho" de i: indice da maior chave entre os filhos de i
+  - se v[i] < v[maiorFilho] 
+    - entao troque  v[i] <-> v[maiorFilho]
+          - chame recursivamente Peneirar(v, n, maiorFilho)
+
+consumo de tempo:
+- Peneirar() é O(h), onde h = altura do heap (arvore binaria),
+  ou seja, Peneirar() é O(log n) no pior caso;
+- Dizemos também que Peneirar() consome O(log n) unidades de tempo
+  no pior caso;
+
+
+Slides 14 a 17: simulacao de Peneirar(0)
+- maior filho é "16" (indice 2), entao devemos trocar "9" <-> "16";
+- o proximo passo é chamar recursivamente Peneirar(2);
+
+Slides 18 a 21: simulacao de Peneirar(2)
+- maior filho é "10" (indice 6), entao devemos trocar "9" <-> "10";
+- o proximo passo é chamar recursivamente Peneirar(6);
+
+Slides 22 a 23:
+- note que Peneirar(6) não altera o heap, pois a posicao 6 é uma folha.
+
+Slides 24 a 39: construcao de um heap
+- ConstroiHeap (v, n)
+  - para i = ultimoPai(n) até 0, faça
+    - Peneirar (v, n, i)
+-25: note que Peneirar() não precisa ser aplicado para as folhas;
+-26: note também que devemos aplicar Peneirar() de "baixo para cima",
+     ou seja, do último pai até a raiz;
+     NAO funcionará se aplicarmos de "cima para baixo", 
+     ou seja, da raiz até o último pai... por que?
+-27: obseve que a chamada recursiva de Peneirar() sempre ocorre 
+     para o maior filho, ou seja, sempre para baixo na árvore;
+     desta forma, o maior nó do exemplo ("16") não poderia subir até a raiz;
+-28: no exemplo, o último pai é "2" (índice 3 = chao(n/2) - 1 
+     = chao(9/2) - 1 = 4 - 1);
+-29: i = 3; nesta iteração, ocorre uma chamada para Peneirar (v, 9, 3);
+     o maior filho de "2" é "14";
+-30: troca "2" <-> "14" e a subárvore enraizada em "14" é um heap;
+-31: i = 2; chama Peneirar (v, 9, 2);
+     o maior filho de "3" é "10";
+-32: troca "3" <-> "10" e a subárvore enraizada em "10" é um heap;
+-33: i = 1; chama Peneirar (v, 9, 1);
+     o maior filho de "1" é "16";
+-34: troca "1" <-> "16" e a subárvore enraizada em "16" é um heap;
+-35: i = 0; chama Peneirar (v, 9, 0);
+-36: o maior filho de "4" é "16";
+-37: troca "4" <-> "16";
+-38: devemos chamar recursivamente Peneirar() para o nó "4";
+     o maior filho de "4" é "14";
+     troca "4" <-> "14";
+     chama recursivamente Peneirar() para o nó "4" (índice 3);
+     o maior filho de "4" agora é "8";
+     troca "4" <-> "8";
+     chama recursivamente Peneirar() para o nó "4" (índice 8), que é folha;
+-39: heap obtido após a chamada ConstroiHeap();
+
+Consumo de tempo:
+- ConstroiHeap (v, n)
+  - para i = ultimoPai(n) até 0, faça     ---- O (n)
+    - Peneirar (v, n, i)                  ---- O (log n) * O (n)
+                                        Total: O (n * log n) + O (n)
+                                             = O (n * log n)
+
+
+
+Slide 40: operacoes insercao e remocao em um heap
+
+Slides 41 a 54: inserir no Heap
+// Assume que ha espaco suficiente no heap.
+- InserirHeap (v, n, chave)
+  - v[n++] = chave
+  - ConstroiHeap (v, n)
+-41: inicialmente o vetor está vazio, n = 0;
+-42: n = 0, chave = 7, chama InserirHeap();
+     v[0] = 7; n++ vai para 1; chama ConstroiHeap();
+     esta chamada nao altera nada pois já era um heap com um único nó;
+-43: n = 1, chave = 10, chama InserirHeap();
+     v[1] = 10; n++ vai para 2; chama ConstroiHeap();
+     o maior filho de "7" é "10", então troca "7" <-> "10";
+-44: resultado após a construção do heap;
+-45: n = 2, chave = 9, chama InserirHeap();
+     v[2] = 9; n++ vai para 3; chama ConstroiHeap();
+     esta chamada nao altera nada pois já era um heap;
+-46: n = 3, chave = 15, chama InserirHeap();
+     v[3] = 15; n++ vai para 4; chama ConstroiHeap();
+     último pai é "7", i = 1,
+     o maior filho de "7" é "15", então troca "7" <-> "15";
+-47: i = 0 (ConstroiHeap()),
+-48: o maior filho de "10" é "15", então troca "10" <-> "15";
+-49: n = 4, chave = 13, chama InserirHeap();
+     v[4] = 13; n++ vai para 5; chama ConstroiHeap();
+-50: último pai é "10", i = 1,
+     o maior filho de "10" é "13", então troca "10" <-> "13";
+     i = 0 (ConstroiHeap()), o resultado já é um heap;
+-51: n = 5, chave = 5, chama InserirHeap();
+     v[5] = 5; n++ vai para 6; chama ConstroiHeap();
+     esta chamada nao altera nada pois já era um heap;
+-52: n = 6, chave = 8, chama InserirHeap();
+     v[6] = 8; n++ vai para 7; chama ConstroiHeap();
+     esta chamada nao altera nada pois já era um heap;
+-53: n = 7, chave = 16, chama InserirHeap();
+     v[7] = 16; n++ vai para 7; chama ConstroiHeap();
+     último pai é "7", i = 3,
+     o maior filho de "7" é "16", então troca "7" <-> "16";
+     i = 2 (ConstroiHeap()), 
+     não há alteração pois a subárvore enraizada em "9" já é um heap;
+     i = 1 (ConstroiHeap()), 
+     o maior filho de "13" é "16", então troca "13" <-> "16";
+-54: i = 0 (ConstroiHeap()), 
+     o maior filho de "15" é "16", então troca "15" <-> "16";
+
+
+Slides 55 a 68: remove a raiz do Heap
+// Assume que o heap nao esta vazio.
+- RemoverHeap (v, n)
+  - troque  v[0] <-> v[n-1]
+  - n--
+  - Peneirar (v, n, 0)
+-55: para remover a raiz "16"...
+-56: trocamos "16" <-> "7" (n = 8, v[0] <-> v[7]);
+-57: n-- vai para 7;
+     chama Peneirar(0),
+     o maior filho de "7" é "15", então troca "7" <-> "15";
+-58: chamada recursiva Peneirar(1),
+     o maior filho de "7" é "13", então troca "7" <-> "13";
+     chamada recursiva Peneirar(3), mas "7" é folha e a recursão termina;
+-59: para remover a raiz "14"...
+-60: trocamos "15" <-> "8" (n = 7, v[0] <-> v[6]);
+-61: n-- vai para 6;
+     chama Peneirar(0),
+     o maior filho de "8" é "13", então troca "8" <-> "13";
+-62: chamada recursiva Peneirar(1),
+     o maior filho de "8" é "10", então troca "8" <-> "10";
+     chamada recursiva Peneirar(4), mas "8" é folha e a recursão termina;
+-63: para remover a raiz "13"...
+-64: trocamos "13" <-> "5" (n = 6, v[0] <-> v[5]);
+-65: n-- vai para 5;
+     chama Peneirar(0),
+-66: o maior filho de "5" é "10", então troca "5" <-> "10";
+-67: chamada recursiva Peneirar(1),
+-68: o maior filho de "5" é "8", então troca "5" <-> "8";
+     chamada recursiva Peneirar(4), mas "5" é folha e a recursão termina;
+
+Os slides 69 e 70 exibem algumas sugestoes de implementação com struct.
+Mas, particularmente, eu consegui fazer os exercícios no BOCA sem usar struct.
+Portanto, fica a critério do aluno se quer ou não usar structs para esta
+parte dos exercícios.
+
+Qualquer dúvida ou sugestão, por favor, envie um email para
+    alex.noma <arroba> gmail.com
+com o(s) número(s) do(s) slide(s) e a pergunta ou comentário.
+
+--
+
+Dicas para os exercicios do BOCA:
+
+
+int filhoE (int i) {
+    return 2*i + 1;
+}
+int filhoD (int i) {
+    return 2*i + 2;
+}
+int pai (int i) {
+    return (i-1)/2;
+}
+int ultimoPai (int n) {
+    return (n/2) - 1;
+}
+void troca (int *v, int i, int j) {
+    int tmp = v[i];
+    v[i] = v[j];
+    v[j] = tmp;
+}
+
+void peneirar (int *v, int n, int i) {
+    int e = filhoE (i), d = filhoD (i), maior = e;
+    if (e < n) {
+        if (d < n && v[d] >= v[maior]) {
+            maior = d;
+        }
+        if (v[i] < v[maior]) {
+            troca (v, i, maior);
+            peneirar (v, n, maior);
+        }
+    }
+}
+
+void constroiHeap (int *v, int n) {
+    int u = ultimoPai (n), i;
+    for (i = u; i >= 0; i--) {
+        peneirar (v, n, i);
+    }
+}
+
+
+--
+
+
+
+
+
+
+

@@ -1,0 +1,294 @@
+Árvores
+
+--
+
+Aula Passada:
+- Heap (estrutura de dados)
+- Heap Sort (algoritmos de ordenacao)
+  - consumo de tempo: O(n * log n)
+
+--
+
+Slides
+-2: motivação para usar árvores
+    - custo para inserção, remoção e busca é O (log n);
+-3: Propriedade estrutural de uma árvore binária de busca:
+    - para cada nó i, temos que os valores das chaves respeitam o seguinte:
+      "subárvore esquerda" < chave de i < "subárvore direita"
+    - à esquerda de i, temos as chaves que são menores que a chave de i;
+    - à direita, temos as chaves maiores...
+-3 a 6: esta propriedade estrutural deve valer para todos os nós
+        de uma árvore binária de busca;
+-7: Árvore Binária de Busca (ABB): implementação
+    - estática: vetor;
+    - dinâmica: lista encadeada (3 ponteiros: pai, filhoE, filhoD);
+-8: implementação (struct)
+    - tArvore: ponteiro para raiz, e inteiro quantidade;
+               arv->raiz e arv->quantidade;
+    - tNo: ponteiros esq, dir, pai, e inteiro chave;
+           novo->esq, novo->dir, novo->pai, novo->chave;
+-9: operações: inserção, remoção e visita dos nós;
+
+Slides 10 a 21: remoção
+-10: remover x = 1;
+     - busca: inicialmente pai = NULL e filho = arv->raiz;
+-11: se x < filho->chave  // vai para a esquerda na arvore
+     entao pai = filho
+           filho = filho->esq
+-12: se x < filho->chave  // vai para a esquerda na arvore
+     entao pai = filho
+           filho = filho->esq
+-13: se x < filho->chave  // vai para a esquerda na arvore
+     entao pai = filho
+           filho = filho->esq
+     - se encontrou o nó...
+-14: caso 1: se o nó a ser removido é uma folha
+             entao pai->esq = NULL   // o nó removido era filho esquerdo
+-15: remover x = 7;
+     - busca: inicialmente pai = NULL e filho = arv->raiz;
+-16: se x > filho->chave  // vai para a direita na arvore
+     entao pai = filho
+           filho = filho->dir
+     - se encontrou o nó...
+-17: caso 2: se o nó a ser removido tem um único filho
+             entao neto = filho->esq   // filho único
+                   pai->dir = neto     // avô aponta para neto
+                   neto->pai = pai     // neto aponta para avô
+-18: remover x = 3;
+     - busca: inicialmente pai = NULL e filho = arv->raiz;
+-19: se x < filho->chave  // vai para a esquerda na arvore
+     entao pai = filho
+           filho = filho->esq
+     - se encontrou o nó...
+-20: caso 3: se o nó a ser removido tem os dois filhos
+     - busque o antecessor (ou sucessor) e remova-o da arvore
+     - troque o nó a ser removido pelo antecessor (ou sucessor);
+       Neste caso, preste muita atenção, pois você tem que acertar
+       os ponteiros (veja código remover() mais adiante): 
+       1) de antecessor para pai, esq e dir;
+       2) de esq e dir para antecessor;
+       3) de pai para antecessor;
+-21: liberar memória e arv->quantidade--;
+
+Slide 22: caso 1, removendo um nó folha;
+    // se nó removido for a raiz da árvore
+    se (pai == NULL) {
+        arv->raiz = NULL;
+    }
+    else {
+        se (ehFilhoEsquerdo (filho)) {
+            pai->esq = NULL;
+        }
+        else {
+            pai->dir = NULL;
+        }
+    }
+
+// Devolve verdadeiro de filho esquerdo do pai.
+// Devolve falso se filho não tiver pai (filho é raiz),
+// ou se filho direito do pai.
+booleano ehFilhoEsquerdo (filho) {
+    pai = filho->pai;
+    se (pai != NULL e pai->esq == filho) {
+        devolva verdadeiro;
+    }
+    devolva falso;
+}
+
+
+Slide 23: caso 2, removendo um nó com um único filho;
+    // faz neto apontar para o único filho
+    neto = filho->esq;
+    se (neto == NULL) {
+        neto = filho->dir;
+    }
+    // se o nó removido for a raiz da árvore
+    se (pai == NULL) {
+        arv->raiz = neto;
+        // note que neto->pai = NULL na última linha...
+    }
+    // senao, acerta conexões entre avô e neto
+    senao {
+        se (ehFilhoEsquerdo (filho)) {
+            pai->esq = neto;
+        }
+        senao {
+            pai->dir = neto;
+        }
+    }
+    neto->pai = pai;  // neto->pai = NULL se pai == NULL
+
+
+Slide 24: caso 3, removendo um nó com os dois filhos;
+    // busca e remove o antecessor da arvore
+    antec = antecessor (filho);
+    // troca antec <-> filho na arvore
+    // 1) ponteiros de antecessor para pai, esq e dir
+    antec->pai = filho->pai;
+    antec->esq = filho->esq;
+    antec->dir = filho->dir;
+    // 2) ponteiros de esq e dir para antecessor
+    se (filho->esq != NULL) {
+        (filho->esq)->pai = antec;
+    }
+    se (filho->dir != NULL) {
+        (filho->dir)->pai = antec;
+    }
+    // 3) ponteiros de pai para antecessor
+    // se no removido for raiz
+    se (pai == NULL) {
+        arv->raiz = antec;
+    }
+    senao {
+        se (ehFilhoESquerdo (filho)) {
+            pai->esq = antec;
+        }
+        senao {
+            pai->dir = antec;
+        }
+    }
+
+
+// Assume que a arvore nao esta vazia.
+remover (arv, x) {
+    // busca a chave x na arvore
+    pai = NULL;
+    filho = arv->raiz;
+    enquanto (filho != NULL e filho->chave != x) {
+        pai = filho;
+        se (x < filho->chave) {  // vai para a esquerda
+            filho = filho->esq;
+        }
+        else {  // vai para a direita na arvore
+            filho = filho->dir;
+        }
+    }
+    se (filho != NULL) {  // se encontrou x: filho->chave == x
+        // caso 1: remove folha
+        se (filho->esq == NULL e filho->dir == NULL) {
+            // se no removido for raiz
+            se (pai == NULL) {
+                arv->raiz = NULL;
+            }
+            else {
+                se (ehFilhoEsquerdo (filho)) {
+                    pai->esq = NULL;
+                }
+                else {
+                    pai->dir = NULL;
+                }
+            }
+        }
+        // caso 2: tem unico filho (faz avo apontar para neto)
+        senao se (filho->esq == NULL ou filho->dir == NULL) {
+            neto = filho->esq;
+            se (neto == NULL) {
+                neto = filho->dir;
+            }
+            // se no removido for raiz
+            se (pai == NULL) {
+                arv->raiz = neto;
+            }
+            senao {
+                se (ehFilhoEsquerdo (filho)) {
+                    pai->esq = neto;
+                }
+                senao {
+                    pai->dir = neto;
+                }
+            }
+            neto->pai = pai;
+        }
+        // caso 3: tem os dois filhos
+        senao {
+            // remove o antecessor da arvore
+            antec = antecessor (filho);      // esta função é definida a seguir...
+            // troca antec <-> filho na arvore
+            antec->pai = filho->pai;
+            antec->esq = filho->esq;
+            antec->dir = filho->dir;
+            se (filho->esq != NULL) {
+                (filho->esq)->pai = antec;
+            }
+            se (filho->dir != NULL) {
+                (filho->dir)->pai = antec;
+            }
+            // se no removido for raiz
+            se (pai == NULL) {
+                arv->raiz = antec;
+            }
+            senao {
+                se (ehFilhoESquerdo (filho)) {
+                    pai->esq = antec;
+                }
+                senao {
+                    pai->dir = antec;
+                }
+            }
+        }
+        libera (filho);   // libera memoria
+    }
+}
+
+Slides 25 a 35: antecessor;
+-25: o antecessor de "50" é "45"
+-26: legenda para o código do próximo slide
+     - rem aponta para o nó que queremos remover;
+     - fesqrem aponta para o seu filho esquerdo;
+     - queremos buscar o antecessor e removê-lo da árvore;
+     - desta forma, poderemos substituir o antecessor pelo nó que
+       queremos remover;
+-27: código para buscar e remover o antecessor
+
+// Assume rem != NULL e rem->esq != NULL.
+No *antecessor (No *rem) {
+    No *ant=NULL, *atu=rem->esq;
+    while (atu != NULL) {
+        ant = atu;
+        atu = atu->dir;
+    }
+    // se antecessor tem (apenas) o filho esquerdo
+    if (ant->esq != NULL) {        
+        if (ant == rem->esq) { // veja Slide 29
+            rem->esq = ant->esq;
+        }
+        else {
+            // veja Slide 31:
+            // note que ant->pai pode ser diferente de fesqrem!
+            (ant->pai)->dir = ant->esq;
+        }
+        (ant->esq)->pai = ant->pai;
+    }
+    // senao, antecessor eh folha
+    else {
+        if (ant == rem->esq) { // veja Slide 33
+            rem->esq = NULL;
+        }
+        else {
+            // veja Slide 35
+            (ant->pai)->dir = NULL;
+        }
+    }
+    return ant;
+}
+
+
+Slides 36 a 45: sucessor;
+-36: o sucessor de "30" é "35";
+     Legenda para o código do próximo slide
+     - rem aponta para o nó que queremos remover;
+     - fdirrem aponta para o seu filho direito;
+     - queremos buscar o sucecessor e removê-lo da árvore;
+     - desta forma, poderíamos substituir o sucessor pelo nó que
+       queremos remover;
+-37: código para buscar e remover o sucessor
+
+--
+
+Qualquer dúvida ou sugestão, por favor, envie um email para
+    alex.noma <arroba> gmail.com
+com o(s) número(s) do(s) slide(s) e a pergunta ou comentário.
+
+--
+
+
