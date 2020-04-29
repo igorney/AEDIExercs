@@ -2,23 +2,40 @@
 #include <stdlib.h>
 typedef struct stFila
 {
-    int *itens;
+    int *items;
     int inicio, fim, tamanho;
 }Fila;
 void iniciaFila(Fila *fila, int n)
 {
-    fila->itens = (int*)malloc(sizeof(int));
+    fila->items = (int*)malloc(sizeof(int));
     fila->inicio = -1;
     fila->fim = -1;
     fila->tamanho = n;
 }
 void enfileirar(Fila *fila, int n)
 {
-    
+
+     if (fila->fim < (fila->tamanho)-1) {
+        fila->fim++;
+        fila->items[fila->fim] = n;
+
+        if (fila->inicio == -1) {
+            fila->inicio++;
+        }
+    }
 }
 void desenfileirar(Fila *fila)
 {
-    
+     if (fila->inicio > -1) {
+        printf("%d\n", fila->items[fila->inicio]);
+        if (fila->inicio < fila->tamanho) {
+            fila->inicio++;
+            if (fila->inicio == fila->fim+1) {
+                fila->inicio = -1;
+                fila->fim = -1;
+            }
+        }
+    }
 }
 
 int main()
