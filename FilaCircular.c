@@ -1,58 +1,57 @@
 #include <stdio.h>
 #include <stdlib.h>
-typedef struct stFila
-{
+
+typedef struct stlista {
     int *items;
-    int inicio, fim, tamanho;
-}Fila;
-void iniciaFila(Fila *fila, int n)
-{
-    fila->items = (int*)malloc(n*sizeof(int));
-    fila->inicio = -1;
-    fila->fim = -1;
-    fila->tamanho = n;
+    int inicio, fim, tam;
+} Lista;
+
+void initList(Lista *lista, int tam) {
+    lista->items = malloc(tam*sizeof(int));
+    lista->inicio = 0;
+    lista->fim = 0;
+    lista->tam = tam;
 }
-void enfileirar(Fila *fila, int n)
-{
-    int aux = (fila->fim + 1)%(fila->tamanho);
-    if (aux != fila->inicio) {
-        fila->items[fila->fim] = n;
-        fila->fim = aux;
+
+void inserir(Lista *lista, int item) {
+    int new_end = (lista->fim + 1)%(lista->tam);
+    if (new_end != lista->inicio) {
+        lista->items[lista->fim] = item;
+        lista->fim = new_end;
     }
 }
-void desenfileirar(Fila *fila)
-{
-    if (fila->inicio != fila->fim) {
-        printf("%d\n", fila->items[fila->inicio]);
-        if (fila->inicio < fila->tamanho) {
-            int aux = (fila->inicio+1)%fila->tamanho;
-            fila->inicio = aux;
+
+void remover(Lista *lista) {
+    if (lista->inicio != lista->fim) {
+        printf("%d\n", lista->items[lista->inicio]);
+        if (lista->inicio < lista->tam) {
+            int new_begin = (lista->inicio+1)%lista->tam;
+            lista->inicio = new_begin;
         }
     }
+
 }
-int main()
-{
-    int tam, num;
+
+int main() {
+    Lista *lista = (Lista*)malloc(sizeof(lista));
+    int tam, item;
     char op;
-    Fila *fila;
     scanf("%d", &tam);
-    iniciaFila(fila, tam);
-    while (scanf(" %c", &op) != EOF)
-    {
-        switch (op)
-        {
-            case 'E':
-                scanf("%d", &num);
-                enfileirar(fila, num);
+    initList(lista, tam);
+
+    while(scanf(" %c", &op) != EOF) {
+
+        switch (op) {
+        case('E'):
+                scanf("%d", &item);
+                inserir(lista, item);
             break;
-            case 'D':
-                scanf("%d", &num);
-                desenfileirar(fila);
+        case('D'):
+                remover(lista);
             break;
         }
+    
     }
-    // free(fila->items);
-
-
+    free(lista);
     return 0;
 }
