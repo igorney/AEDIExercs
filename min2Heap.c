@@ -19,14 +19,14 @@ void troca (int *v, int i, int j) {
 }
 
 void peneirar (int *v, int n, int i) {
-    int e = filhoE (i), d = filhoD (i), maior = e;
+    int e = filhoE (i), d = filhoD (i), menor = e;
     if (e < n) {
-        if (d < n && v[d] >= v[maior]) {
-            maior = d;
+        if (d < n && v[d] <= v[menor]) {
+            menor = d;
         }
-        if (v[i] < v[maior]) {
-            troca (v, i, maior);
-            peneirar (v, n, maior);
+        if (v[i] > v[menor]) {
+            troca (v, i, menor);
+            peneirar (v, n, menor);
         }
     }
 }
