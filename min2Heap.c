@@ -45,18 +45,29 @@ void showHeap(int *v, int n){
     }
 }
 int main(){
-    int n, i;
+    int n, i, op;
     scanf("%d", &n);
-    int *v;
-    while (n != 0)
+    int *v = malloc(n * sizeof(int));
+    i = 0;
+    while (scanf("%d", &op) != EOF)
     {
-        v = malloc(n * sizeof(int));
-        for(i = 0; i < n; i++){
-            scanf("%d", &v[i]);
-        }
-        constroiHeap(v, n);
-        showHeap(v, n);
-        scanf("%d", &n);
+       switch (op)
+       {
+       case 1:
+           printf("batata1\n");
+
+           break;
+       case 2:
+           printf("batata2\n");
+        
+           break;
+        case 3:
+           printf("batata3\n");
+
+           break;
+       default:
+           break;
+       }
     }
     free(v);
     return 0;
