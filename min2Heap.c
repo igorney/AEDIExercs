@@ -44,29 +44,51 @@ void showHeap(int *v, int n){
         else printf("%d ", v[i]);
     }
 }
+int searchPosition(int *v, int tam, int n){
+    int i = 0;
+    for(i = 0; i < tam; i++) if(v[i] == n) break; //search element position
+    return i;
+}
+void removeHeap(int *v, int n, int tam){
+    int i = searchPosition(v, tam, n);
+    int aux;
+    if(i < tam){
+        while(i < tam){
+            aux = v[i];
+            v[i] = v[i+1];
+            v[i+1] = aux;
+            i++;
+        }
+    }
+    else if(i == tam){
+        return;
+    }
+}
 int main(){
-    int n, i, op;
-    scanf("%d", &n);
-    int *v = malloc(n * sizeof(int));
+    int n, i, op, tam;
+    scanf("%d", &tam);
+    int *v = malloc(tam * sizeof(int));
     i = 0;
     while (scanf("%d", &op) != EOF)
     {
        switch (op)
        {
-       case 1:
-           printf("batata1\n");
-
-           break;
-       case 2:
-           printf("batata2\n");
-        
-           break;
-        case 3:
-           printf("batata3\n");
-
-           break;
-       default:
-           break;
+        case 1:
+                scanf("%d", &n);
+                v[i] = n; i++;
+                constroiHeap(v, i);
+                break;
+        case 2:
+                scanf("%d", &n);
+                removeHeap(v, n, i);
+                i--;
+                break;
+            case 3:
+                constroiHeap(v, i);
+                printf("%d\n", v[0]);
+                break;
+        default:
+            break;
        }
     }
     free(v);
