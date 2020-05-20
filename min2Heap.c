@@ -1,3 +1,5 @@
+// gcc min2Heap.c -o prog.exe
+
 #include <stdio.h>
 #include <stdlib.h>
 int filhoE (int i) {
@@ -53,24 +55,35 @@ void removeHeap(int *v, int n, int tam){
     int i = searchPosition(v, tam, n);
     int aux;
     if(i < tam){
+        //@@@@@ troca com o ultimo elemento do heap
+        aux = v[i];
+        v[i] = v[tam-1];
+        v[tam-1] = aux;
+        constroiHeap(v, tam-1);
+    /*################ Acho que era este laco que estava causando demora no tempo... sera?
         while(i < tam){
             aux = v[i];
             v[i] = v[i+1];
             v[i+1] = aux;
             i++;
         }
+        
     }
     else if(i == tam){
         return;
+        */
     }
 }
 int main(){
     int n, i, op, tam;
-    scanf("%d", &tam);
+    scanf("%d", &tam);  //@@@@ qtde de operacoes, nao?
     int *v = malloc(tam * sizeof(int));
     i = 0;
-    while (scanf("%d", &op) != EOF)
+    //while (scanf("%d", &op) != EOF) //############ Mudei para ficar de acordo com a descricao.
+    int j;
+    for (j = 0; j < tam; j++)  // @@@@@@@@@ qtde de operacoes
     {
+       scanf ("%d", &op);
        switch (op)
        {
         case 1:
@@ -84,7 +97,7 @@ int main(){
                 i--;
                 break;
             case 3:
-                constroiHeap(v, i);
+                //constroiHeap(v, i); ##########
                 printf("%d\n", v[0]);
                 break;
         default:
