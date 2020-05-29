@@ -49,6 +49,9 @@ void Inserir (Arvore *arv, int x) {
             else if(x != filho->chave) { // modificar se nao quiser inserir chaves repetidas!
                 filho = filho->esq;
             }
+            else{
+                return;
+            }
         }
         // Neste ponto, temos que filho == NULL e pai != NULL.
         if (x > pai->chave) {
